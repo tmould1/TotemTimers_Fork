@@ -236,10 +236,15 @@ function TotemTimers.WeaponUpdate(self, elapsed)
         end
     end
 
+    -- TBC Anniversary fix: These functions don't exist in TBC Anniversary
     if showGlow and TotemTimers.Specialization == 2 and TotemTimers.ActiveProfile.WeaponGlow then
-        ActionButton_ShowOverlayGlow(self.button)
+        if ActionButton_ShowOverlayGlow then
+            ActionButton_ShowOverlayGlow(self.button)
+        end
     else
-        ActionButton_HideOverlayGlow(self.button)
+        if ActionButton_HideOverlayGlow then
+            ActionButton_HideOverlayGlow(self.button)
+        end
     end
 
     XiTimers.Update(self, 0)

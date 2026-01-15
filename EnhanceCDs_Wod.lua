@@ -575,14 +575,14 @@ function TotemTimers.EnhanceCDEvents(self, event, spell)
             end
             CooldownFrame_Set(self.cooldown, start, duration, enable)
         end 
-    elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW" then 
+    elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW" then
 		if spell == self.glowSpell then
-			ActionButton_ShowOverlayGlow(self)			
+			if ActionButton_ShowOverlayGlow then ActionButton_ShowOverlayGlow(self) end
 		end
-	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE" then		
+	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE" then
 		if spell == self.glowSpell then
-			ActionButton_HideOverlayGlow(self)
-		end		
+			if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(self) end
+		end
 	end
 end
 

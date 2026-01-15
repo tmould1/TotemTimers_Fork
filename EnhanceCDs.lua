@@ -494,11 +494,11 @@ function TotemTimers.EnhanceCDEvents(self, event, spell)
         end
     elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW" then
         if spell == self.glowSpell then
-            ActionButton_ShowOverlayGlow(self)
+            if ActionButton_ShowOverlayGlow then ActionButton_ShowOverlayGlow(self) end
         end
     elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE" then
         if spell == self.glowSpell then
-            ActionButton_HideOverlayGlow(self)
+            if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(self) end
         end
     end
 end
@@ -629,7 +629,7 @@ function TotemTimers.ShockEvent(self, event, unit, ...)
                 if (spellID == Focused or spellID == ElementalFocus or spellID == ClearCasting) then
                     if not ShockBuffActive[self.timer.nr] then
                         ShockBuffActive[self.timer.nr] = true
-                        ActionButton_ShowOverlayGlow(self)
+                        if ActionButton_ShowOverlayGlow then ActionButton_ShowOverlayGlow(self) end
                     end
                     return
                  end
@@ -639,7 +639,7 @@ function TotemTimers.ShockEvent(self, event, unit, ...)
         end
         if ShockBuffActive[self.timer.nr] then
             ShockBuffActive[self.timer.nr] = false
-            ActionButton_HideOverlayGlow(self)
+            if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(self) end
         end
     else
         TotemTimers.EnhanceCDEvents(self, event, unit, ...)
@@ -708,6 +708,7 @@ end
 TotemTimers.FindActionButtons = FindActionButtons
 
 local function ShowButtonsOverlayGlow(buttonList)
+    if not ActionButton_ShowOverlayGlow then return end
     for b = 1, #buttonList do
         ActionButton_ShowOverlayGlow(buttonList[b])
     end
@@ -715,6 +716,7 @@ end
 TotemTimers.ShowButtonsOverlayGlow = ShowButtonsOverlayGlow
 
 local function HideButtonsOverlayGlow(buttonList)
+    if not ActionButton_HideOverlayGlow then return end
     for b = 1, #buttonList do
         ActionButton_HideOverlayGlow(buttonList[b])
     end
@@ -734,7 +736,7 @@ function TotemTimers.MaelstromEvent(self)
     if (not count or count < 5) and maelstromSpellsButtons and #maelstromSpellsButtons > 0 then
         HideButtonsOverlayGlow(maelstromSpellsButtons)
         maelstromSpellsButtons = nil
-        ActionButton_HideOverlayGlow(TotemTimers.MaelstromButton)
+        if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(TotemTimers.MaelstromButton) end
     end
 
     if not count then
@@ -762,7 +764,7 @@ function TotemTimers.MaelstromEvent(self)
             MaelstromIcon:Show()
             MaelstromIcon.icon:SetTexture("Interface/AddOns/TotemTimers/textures/mw"..count) -- ..(count < 5 and "_"..count or ""))
             animate = MaelstromIcon.icon
-            ActionButton_HideOverlayGlow(TotemTimers.MaelstromButton)
+            if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(TotemTimers.MaelstromButton) end
         end
 
 
@@ -784,7 +786,7 @@ function TotemTimers.MaelstromEvent(self)
             end
 
             if numberOnly then
-                ActionButton_ShowOverlayGlow(TotemTimers.MaelstromButton)
+                if ActionButton_ShowOverlayGlow then ActionButton_ShowOverlayGlow(TotemTimers.MaelstromButton) end
             end
         end
 
@@ -799,12 +801,14 @@ function gmb()
 end
 
 function smb()
+    if not ActionButton_ShowOverlayGlow then return end
     for b = 1, #maelstromSpellsButtons do
         ActionButton_ShowOverlayGlow(maelstromSpellsButtons[b])
     end
 end
 
 function hmb()
+    if not ActionButton_HideOverlayGlow then return end
     for b = 1, #maelstromSpellsButtons do
         ActionButton_HideOverlayGlow(maelstromSpellsButtons[b])
     end

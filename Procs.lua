@@ -208,12 +208,12 @@ function TotemTimersProcs:ToggleGlow(count)
     if count >= self.glow then
         self.glowing = true
         for button in pairs(self.buttons) do
-            ActionButton_ShowOverlayGlow(button)
+            if ActionButton_ShowOverlayGlow then ActionButton_ShowOverlayGlow(button) end
         end
     elseif self.glowing then
         self.glowing = false
         for button in pairs(self.buttons) do
-            ActionButton_HideOverlayGlow(button)
+            if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(button) end
         end
     end
 end
@@ -240,10 +240,13 @@ local function ActionButton_UpdateHook(self)
     for _, proc in pairs(Procs) do
         proc:CheckButton(self, spell)
     end
-    ActionButton_HideOverlayGlow(self)
+    if ActionButton_HideOverlayGlow then ActionButton_HideOverlayGlow(self) end
 end
 
-hooksecurefunc("ActionButton_Update", ActionButton_UpdateHook)
+-- TBC Anniversary fix: ActionButton_Update doesn't exist in TBC Anniversary
+if ActionButton_Update then
+    hooksecurefunc("ActionButton_Update", ActionButton_UpdateHook)
+end
 
 local function XiTimersButtonUpdate()
     for t = 1, #TotemTimers.EnhanceCDs do

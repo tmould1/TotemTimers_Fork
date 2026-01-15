@@ -18,6 +18,7 @@ TBC Anniversary Edition (WOW_PROJECT_ID = 5) introduced several compatibility is
 - **XiTimers.timers nil errors** - Fixed multiple files accessing timers before they're created
 - **MaelstromIcon nil error** - Added nil check (Maelstrom Weapon only exists in WotLK+)
 - **ActionButton_Update hook error** - Function doesn't exist in TBC Anniversary
+- **ActionButton_ShowOverlayGlow/HideOverlayGlow errors** - These functions don't exist in TBC Anniversary, added nil checks
 - **BuffFrame.BuffAlphaValue nil error** - Added fallback value for flash animations
 - **Negative timer display fix** - Added guard against negative cooldown calculations
 - **TOC Interface version** - Updated to 20505
