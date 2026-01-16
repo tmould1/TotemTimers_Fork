@@ -164,75 +164,6 @@ frame:HookScript("OnShow", function(self)
         end,
     }
 
-    -- Switch loadout dropdown (only show if there are sets)
-    if #Sets > 0 then
-        args.switchHeader = {
-            type = "header",
-            order = 20,
-            name = "Switch Loadout",
-        }
-
-        args.loadoutSelect = {
-            type = "select",
-            order = 21,
-            name = "Select Loadout",
-            desc = "Choose a loadout to activate",
-            values = GetLoadoutValues,
-            set = function(info, val)
-                selectedLoadout = val
-                if ApplyLoadout(val) then
-                    local set = Sets[val]
-                    local name = set.name or ("Loadout " .. val)
-                    print("|cff00ff00TotemTimers:|r Activated loadout '" .. name .. "'")
-                end
-                ACR:NotifyChange("TotemTimers")
-            end,
-            get = function()
-                -- Default to active loadout if set
-                if TotemTimers.ActiveProfile.ActiveLoadout and Sets[TotemTimers.ActiveProfile.ActiveLoadout] then
-                    selectedLoadout = TotemTimers.ActiveProfile.ActiveLoadout
-                end
-                return selectedLoadout
-            end,
-        }
-
-        -- Show current loadout's totems
-        args.currentTotems = {
-            type = "description",
-            order = 22,
-            name = function()
-                local set = Sets[selectedLoadout]
-                if set then
-                    return "Totems: " .. GetTotemDescription(set)
-                end
-                return ""
-            end,
-        }
-
-        args.overwrite = {
-            type = "execute",
-            order = 23,
-            name = "Overwrite Selected",
-            desc = "Replace the selected loadout with your current totems",
-            func = function()
-                local set = Sets[selectedLoadout]
-                if not set then return end
-
-                local newTotems = GetCurrentTotems()
-                for k, v in pairs(newTotems) do
-                    set[k] = v
-                end
-
-                TotemTimers.ProgramSetButtons()
-
-                local name = set.name or ("Loadout " .. selectedLoadout)
-                print("|cff00ff00TotemTimers:|r Updated loadout '" .. name .. "'")
-
-                ACR:NotifyChange("TotemTimers")
-            end,
-        }
-    end
-
     -- Existing loadouts management section
     args.manageHeader = {
         type = "header",
@@ -280,6 +211,7 @@ frame:HookScript("OnShow", function(self)
                 type = "input",
                 name = L["Rename"],
                 order = baseOrder + 2,
+                width = 0.9,
                 arg = i,
                 set = function(info, value)
                     if not Sets[info.arg] then return end
@@ -296,12 +228,13 @@ frame:HookScript("OnShow", function(self)
                 type = "execute",
                 name = function()
                     local currentSet = Sets[i]
-                    if not currentSet then return "Choose Icon" end
+                    if not currentSet then return "Icon" end
                     local icon = currentSet.icon or TotemTimers.GetLoadoutIcon(i)
-                    return "|T" .. icon .. ":20|t Choose Icon"
+                    return "|T" .. icon .. ":16|t Icon"
                 end,
                 desc = "Click to choose an icon for this loadout",
                 order = baseOrder + 2.5,
+                width = 0.5,
                 arg = i,
                 func = function(info)
                     if not Sets[info.arg] then return end
@@ -321,10 +254,42 @@ frame:HookScript("OnShow", function(self)
                 end,
             }
 
+            args["setUpdate" .. i] = {
+                type = "execute",
+                name = "Update",
+                desc = "Replace this loadout with your current totems (without switching to it first)",
+                order = baseOrder + 2.7,
+                width = 0.5,
+                arg = i,
+                func = function(info)
+                    local setIndex = info.arg
+                    local set = Sets[setIndex]
+                    if not set then return end
+
+                    local newTotems = GetCurrentTotems()
+                    for k, v in pairs(newTotems) do
+                        set[k] = v
+                    end
+
+                    TotemTimers.ProgramSetButtons()
+
+                    -- Update loadout bar
+                    if TotemTimers.CreateLoadoutMenuButtons then
+                        TotemTimers.CreateLoadoutMenuButtons()
+                    end
+
+                    local name = set.name or ("Loadout " .. setIndex)
+                    print("|cff00ff00TotemTimers:|r Updated loadout '" .. name .. "'")
+
+                    ACR:NotifyChange("TotemTimers")
+                end,
+            }
+
             args["setDelete" .. i] = {
                 type = "execute",
                 name = L["Delete"],
                 order = baseOrder + 3,
+                width = 0.5,
                 arg = i,
                 func = function(info)
                     if not Sets[info.arg] then return end

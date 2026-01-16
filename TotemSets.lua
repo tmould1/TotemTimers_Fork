@@ -469,15 +469,6 @@ function TotemTimers.LoadoutMenuButton_OnClick(self, button)
 
         -- Hide menu
         TotemTimers.HideLoadoutMenu()
-    elseif button == "RightButton" then
-        -- Delete loadout
-        if InCombatLockdown() then
-            print("|cffff0000TotemTimers:|r Cannot delete loadout during combat")
-            return
-        end
-        TotemTimers.HideLoadoutMenu()
-        local popup = StaticPopup_Show("TOTEMTIMERS_DELETESET", set.name or setIndex)
-        popup.data = setIndex
     end
 end
 
