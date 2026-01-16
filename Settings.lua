@@ -676,6 +676,22 @@ SettingsFunctions = {
         end
     end,
 
+    ShowElement = function(value, Timers)
+        -- Show/hide individual totem element buttons
+        if not value then return end
+        for element = 1, 4 do
+            local timer = Timers[element]
+            if timer and timer.button then
+                if value[element] == false then
+                    timer:Deactivate()
+                else
+                    timer:Activate()
+                end
+            end
+        end
+        TotemTimers.OrderTimers()
+    end,
+
     Tracker_Clickthrough = function(value, Timers)
         for i = TRACKER_START, TRACKER_END do
             if Timers[i] and Timers[i].button then

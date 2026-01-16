@@ -77,6 +77,7 @@ TotemTimers.DefaultProfile = {
         PartyRangePosition = "TOP",
         ShowRaidRangeTooltip = true,
         Timer_Clickthrough = false,
+        ShowElement = {[1] = true, [2] = true, [3] = true, [4] = true},
         IncludeInMacro = {[1] = true, [2] = true, [3] = true, [4] = true,},
         MacroReset = 15,
         TwistingTimer = false,
@@ -621,7 +622,7 @@ local TimerList = {
     TimerSpacing, TimerTimeSpacing, TotemTimerBarWidth, TotemMenuSpacing,
     OpenOnRightclick, MenusAlwaysVisible, BarBindings, ReverseBarBindings,
     MiniIcons, ProcFlash, ColorTimerBars, ShowCooldowns, 
-    CheckPlayerRange, CheckRaidRange, ShowRaidRangeTooltip, Timer_Clickthrough,
+    CheckPlayerRange, CheckRaidRange, ShowRaidRangeTooltip, Timer_Clickthrough, ShowElement,
 }
 
 function TotemTimers.CopyTimerSettings(p1,p2)

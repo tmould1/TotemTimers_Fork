@@ -59,6 +59,71 @@ TotemTimers.options.args.timers = {
                 return TotemTimers.ActiveProfile.Timer_Clickthrough
             end,
         },
+        hElements = {
+            order = 2,
+            type = "header",
+            name = "Show/Hide Elements",
+        },
+        showEarth = {
+            order = 3,
+            type = "toggle",
+            name = L["Earth"],
+            desc = "Show or hide the Earth totem button",
+            set = function(info, val)
+                TotemTimers.ActiveProfile.ShowElement = TotemTimers.ActiveProfile.ShowElement or {true, true, true, true}
+                TotemTimers.ActiveProfile.ShowElement[EARTH_TOTEM_SLOT] = val
+                TotemTimers.ProcessSetting("ShowElement")
+            end,
+            get = function(info)
+                if not TotemTimers.ActiveProfile.ShowElement then return true end
+                return TotemTimers.ActiveProfile.ShowElement[EARTH_TOTEM_SLOT] ~= false
+            end,
+        },
+        showFire = {
+            order = 4,
+            type = "toggle",
+            name = L["Fire"],
+            desc = "Show or hide the Fire totem button",
+            set = function(info, val)
+                TotemTimers.ActiveProfile.ShowElement = TotemTimers.ActiveProfile.ShowElement or {true, true, true, true}
+                TotemTimers.ActiveProfile.ShowElement[FIRE_TOTEM_SLOT] = val
+                TotemTimers.ProcessSetting("ShowElement")
+            end,
+            get = function(info)
+                if not TotemTimers.ActiveProfile.ShowElement then return true end
+                return TotemTimers.ActiveProfile.ShowElement[FIRE_TOTEM_SLOT] ~= false
+            end,
+        },
+        showWater = {
+            order = 5,
+            type = "toggle",
+            name = L["Water"],
+            desc = "Show or hide the Water totem button",
+            set = function(info, val)
+                TotemTimers.ActiveProfile.ShowElement = TotemTimers.ActiveProfile.ShowElement or {true, true, true, true}
+                TotemTimers.ActiveProfile.ShowElement[WATER_TOTEM_SLOT] = val
+                TotemTimers.ProcessSetting("ShowElement")
+            end,
+            get = function(info)
+                if not TotemTimers.ActiveProfile.ShowElement then return true end
+                return TotemTimers.ActiveProfile.ShowElement[WATER_TOTEM_SLOT] ~= false
+            end,
+        },
+        showAir = {
+            order = 6,
+            type = "toggle",
+            name = L["Air"],
+            desc = "Show or hide the Air totem button",
+            set = function(info, val)
+                TotemTimers.ActiveProfile.ShowElement = TotemTimers.ActiveProfile.ShowElement or {true, true, true, true}
+                TotemTimers.ActiveProfile.ShowElement[AIR_TOTEM_SLOT] = val
+                TotemTimers.ProcessSetting("ShowElement")
+            end,
+            get = function(info)
+                if not TotemTimers.ActiveProfile.ShowElement then return true end
+                return TotemTimers.ActiveProfile.ShowElement[AIR_TOTEM_SLOT] ~= false
+            end,
+        },
         h1 = {
             order = 10,
             type = "header",
