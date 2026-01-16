@@ -149,12 +149,20 @@ function TotemTimers.SetupGlobals()
 		TotemTimersFrame:Show()
         
         TotemTimers.InitSetButtons()
-		
-	
+        TotemTimers.InitLoadoutBar()
+
+
 		--set the slashcommand
 		SLASH_TOTEMTIMERS1 = "/totemtimers";
 		SLASH_TOTEMTIMERS2 = "/tt";
 		SlashCmdList["TOTEMTIMERS"] = TotemTimers_Slash
+
+		-- Shortcut for loadout commands: /ttl or /ttloadout
+		SLASH_TTLOADOUT1 = "/ttl";
+		SLASH_TTLOADOUT2 = "/ttloadout";
+		SlashCmdList["TTLOADOUT"] = function(msg)
+			TotemTimers_Slash("loadout " .. (msg or ""))
+		end
 
 		--TotemTimers_LastGUIPane = TotemTimers_GUI_General
 
@@ -200,7 +208,93 @@ function TotemTimers.SetupGlobals()
     --TotemTimersFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function TotemTimers_Slash()
+function TotemTimers_Slash(msg)
+    msg = msg and msg:lower():trim() or ""
+
+    -- Handle loadout commands
+    if msg:match("^loadout") or msg:match("^load") or msg:match("^l%s") or msg:match("^l$") then
+        local arg = msg:match("^%S+%s+(.+)") or ""
+        arg = arg:trim()
+
+        local Sets = TotemTimers.ActiveProfile.TotemSets
+
+        if arg == "" or arg == "list" then
+            -- List all loadouts
+            if #Sets == 0 then
+                print("|cff00aaffTotemTimers:|r No loadouts saved. Use /tt loadout save <name> to create one.")
+            else
+                print("|cff00aaffTotemTimers:|r Available loadouts:")
+                for i, set in ipairs(Sets) do
+                    local active = TotemTimers.ActiveProfile.ActiveLoadout == i and " |cff00ff00[Active]|r" or ""
+                    print("  " .. i .. ". " .. (set.name or ("Loadout " .. i)) .. active)
+                end
+                print("Use: /tt loadout <number or name> to switch")
+            end
+            return
+        end
+
+        if arg:match("^save%s*(.*)") then
+            -- Save current totems as new loadout
+            local name = arg:match("^save%s+(.+)")
+            if InCombatLockdown() then
+                print("|cffff0000TotemTimers:|r Cannot save loadout during combat")
+                return
+            end
+            if #Sets >= 8 then
+                print("|cffff0000TotemTimers:|r Maximum of 8 loadouts reached. Delete one first.")
+                return
+            end
+
+            local newSet = {}
+            for i = 1, 4 do
+                local nr = XiTimers.timers[i].nr
+                local spell = XiTimers.timers[i].button:GetAttribute("*spell1")
+                spell = TotemTimers.GetBaseSpellID(spell)
+                if not spell then spell = 0 end
+                newSet[nr] = spell
+            end
+            newSet.name = name and name:trim() ~= "" and name:trim() or nil
+            table.insert(Sets, newSet)
+            TotemTimers.ProgramSetButtons()
+
+            local displayName = newSet.name or ("Loadout " .. #Sets)
+            print("|cff00ff00TotemTimers:|r Saved loadout '" .. displayName .. "'")
+            return
+        end
+
+        -- Try to switch to a loadout by number or name
+        if InCombatLockdown() then
+            print("|cffff0000TotemTimers:|r Cannot change loadout during combat")
+            return
+        end
+
+        local setIndex = tonumber(arg)
+        if not setIndex then
+            -- Search by name
+            for i, set in ipairs(Sets) do
+                if set.name and set.name:lower() == arg then
+                    setIndex = i
+                    break
+                end
+            end
+        end
+
+        if setIndex and Sets[setIndex] then
+            for i = 1, 4 do
+                local spell = TotemTimers.UpdateSpellRank(Sets[setIndex][XiTimers.timers[i].nr])
+                XiTimers.timers[i].button:SetAttribute("*spell1", spell)
+            end
+            TotemTimers.ActiveProfile.ActiveLoadout = setIndex
+            local name = Sets[setIndex].name or ("Loadout " .. setIndex)
+            print("|cff00ff00TotemTimers:|r Activated loadout '" .. name .. "'")
+        else
+            print("|cffff0000TotemTimers:|r Loadout not found: " .. arg)
+            print("Use /tt loadout list to see available loadouts")
+        end
+        return
+    end
+
+    -- Default behavior: open options
 	if InCombatLockdown() then
 		DEFAULT_CHAT_FRAME:AddMessage("Can't open TT options in combat.")
 		return

@@ -37,6 +37,8 @@ Bindings.lua
 ToolTips.lua
 TotemSets.xml
 TotemSets.lua
+LoadoutBar.xml
+IconPicker.lua
 TTActionBars.lua
 DefaultSettings.lua
 Settings.lua

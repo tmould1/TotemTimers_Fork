@@ -1,0 +1,105 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+  <!-- Template for loadout menu buttons (like totem menu buttons) -->
+  <Button name="TotemTimers_LoadoutMenuButtonTemplate" frameStrata="HIGH" virtual="true" hidden="true" enableMouse="true" inherits="ActionButtonTemplate">
+    <Size x="36" y="36"/>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentIcon" setAllPoints="true"/>
+      </Layer>
+      <Layer level="OVERLAY">
+        <!-- Mini totem icons in corners -->
+        <Texture name="$parentTotem1">
+          <Size x="14" y="14"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="1" y="-1"/>
+          </Anchors>
+        </Texture>
+        <Texture name="$parentTotem2">
+          <Size x="14" y="14"/>
+          <Anchors>
+            <Anchor point="TOPRIGHT" x="-1" y="-1"/>
+          </Anchors>
+        </Texture>
+        <Texture name="$parentTotem3">
+          <Size x="14" y="14"/>
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" x="1" y="1"/>
+          </Anchors>
+        </Texture>
+        <Texture name="$parentTotem4">
+          <Size x="14" y="14"/>
+          <Anchors>
+            <Anchor point="BOTTOMRIGHT" x="-1" y="1"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <NormalTexture name="$parentNormalTexture" file="Interface\Buttons\UI-Quickslot2">
+      <Size x="54" y="54"/>
+      <Anchors>
+        <Anchor point="CENTER">
+          <Offset x="0" y="-1"/>
+        </Anchor>
+      </Anchors>
+    </NormalTexture>
+    <PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>
+    <HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square"/>
+    <Scripts>
+      <OnClick>
+        TotemTimers.LoadoutMenuButton_OnClick(self, button)
+      </OnClick>
+      <OnEnter>
+        TotemTimers.LoadoutMenuButton_OnEnter(self)
+      </OnEnter>
+      <OnLeave>
+        TotemTimers.LoadoutMenuButton_OnLeave(self)
+      </OnLeave>
+    </Scripts>
+  </Button>
+
+  <!-- Main loadout bar anchor button (like totem timer button) -->
+  <Button name="TotemTimers_LoadoutBarAnchor" frameStrata="MEDIUM" parent="UIParent" hidden="true" movable="true" enableMouse="true" clampedToScreen="true" inherits="ActionButtonTemplate">
+    <Size x="36" y="36"/>
+    <Anchors>
+      <Anchor point="CENTER"/>
+    </Anchors>
+    <Layers>
+      <Layer level="OVERLAY">
+        <Texture name="$parentIcon" setAllPoints="true"/>
+      </Layer>
+    </Layers>
+    <NormalTexture name="$parentNormalTexture" file="Interface\Buttons\UI-Quickslot2">
+      <Size x="54" y="54"/>
+      <Anchors>
+        <Anchor point="CENTER">
+          <Offset x="0" y="-1"/>
+        </Anchor>
+      </Anchors>
+    </NormalTexture>
+    <PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>
+    <HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square"/>
+    <Scripts>
+      <OnMouseDown>
+        if not TotemTimers.ActiveProfile.Lock and button == "LeftButton" and IsShiftKeyDown() then
+          self:StartMoving()
+        end
+      </OnMouseDown>
+      <OnMouseUp>
+        self:StopMovingOrSizing()
+        TotemTimers.SaveLoadoutBarPosition()
+      </OnMouseUp>
+      <OnEnter>
+        TotemTimers.LoadoutBar_OnEnter(self)
+      </OnEnter>
+      <OnLeave>
+        TotemTimers.LoadoutBar_OnLeave(self)
+      </OnLeave>
+      <OnClick>
+        TotemTimers.LoadoutBar_OnClick(self, button)
+      </OnClick>
+    </Scripts>
+  </Button>
+
+</Ui>

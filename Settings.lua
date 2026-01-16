@@ -700,6 +700,17 @@ SettingsFunctions = {
         end
     end,
 
+    LoadoutBar = function(value, Timers)
+        local anchor = TotemTimers_LoadoutBarAnchor
+        if anchor then
+            if value then
+                anchor:Show()
+            else
+                anchor:Hide()
+            end
+        end
+    end,
+
     CooldownAlpha = function(value, Timers)
         for i = 1, #Timers do
             Timers[i].button.cooldown:SetAlpha(value)

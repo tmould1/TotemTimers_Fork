@@ -115,24 +115,18 @@ TotemTimers.options.args.profiles = {
                     order = 2,
                     type = "input",
                     name = L["New Name"],
-                    get = function(info) return NameInput end,
-                    set = function(info, val) NameInput = val end,
-                },
-                ["create"] = {
-                    order = 3,
-                    type = "execute",
-                    name = L["Create Profile"],
-                    func = function(info) 
-                        if NameInput ~= "" then
-                            if TotemTimers_Profiles[NameInput] or NameInput == L["default"] then
+                    desc = "Type a name and press Enter to create a new profile",
+                    get = function(info) return "" end,  -- Always show empty for new input
+                    set = function(info, val)
+                        if val ~= "" then
+                            if TotemTimers_Profiles[val] or val == L["default"] then
                                 print(L["Profile already exists."])
                             else
-                                TotemTimers.CreateProfile(NameInput)
-                                SelectedProfile = NameInput
-                                frame:Show()
+                                TotemTimers.CreateProfile(val)
+                                SelectedProfile = val
+                                print("|cff00ff00TotemTimers:|r Created profile '" .. val .. "'")
+                                LibStub("AceConfigRegistry-3.0"):NotifyChange("TotemTimers")
                             end
-                        else
-                            print(L["You need to enter a profile name first."])
                         end
                     end,
                 },

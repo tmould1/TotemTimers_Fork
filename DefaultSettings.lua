@@ -202,7 +202,12 @@ TotemTimers.DefaultProfile = {
     --Totems
         TotemOrder = {},
         TotemSets = {},
+        ActiveLoadout = nil,
         HiddenTotems = {},
+
+    --Loadout Bar
+        LoadoutBar = true,
+        LoadoutBarPosition = nil,
 
     --CrowdControl
         CrowdControlEnable = true,
@@ -664,7 +669,7 @@ end ]]
 
 
 local TotemSettings = {
-    TotemOrder, HiddenTotems, TotemSets,
+    TotemOrder, HiddenTotems, TotemSets, ActiveLoadout, LoadoutBar, LoadoutBarPosition,
 }
 
 function TotemTimers.CopyTotemSettings(p1,p2)
