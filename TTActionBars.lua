@@ -132,7 +132,7 @@ function TTActionBars:new(numbuttons, parent, secondanchor, directionanchor, bar
         b:SetAttribute("*type2", nil)
         -- TBC Anniversary fix: Use macro type for reliable casting
         b:SetAttribute("type1", "macro")
-        b:SetAttribute("type", "macro")
+        b:SetAttribute("type2", nil)  -- Right-click should NOT cast, only assign
         b:SetAttribute("*type1", "macro")
         -- TBC Anniversary fix: Use spell names instead of IDs for secure action buttons
         b.useSpellNames = true
