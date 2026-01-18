@@ -1,0 +1,6 @@
+package-as: TotemTimers
+
+ignore:
+  - .claude
+  - .github
+  - "*.md"
